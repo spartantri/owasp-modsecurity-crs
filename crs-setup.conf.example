@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------------
-# OWASP ModSecurity Core Rule Set ver.3.0.2
-# Copyright (c) 2006-2017 Trustwave and contributors. All rights reserved.
+# OWASP ModSecurity Core Rule Set ver.3.1.1
+# Copyright (c) 2006-2019 Trustwave and contributors. All rights reserved.
 #
 # The OWASP ModSecurity Core Rule Set is distributed under
 # Apache Software License (ASL) version 2
@@ -17,7 +17,7 @@
 # ModSecurity Web Application Firewall.
 #
 # See also:
-# https://modsecurity.org/crs/
+# https://coreruleset.org/
 # https://github.com/SpiderLabs/owasp-modsecurity-crs
 # https://www.owasp.org/index.php/Category:OWASP_ModSecurity_Core_Rule_Set_Project
 #
@@ -34,9 +34,10 @@
 # ModSecurity settings (modsecurity.conf) such as SecRuleEngine,
 # SecRequestBodyAccess, SecAuditEngine, SecDebugLog, and XML processing.
 #
-# The CRS assumes that modsecurity.conf has been loaded. If you don't have this
-# file, you can get it from:
-# https://github.com/SpiderLabs/ModSecurity/blob/master/modsecurity.conf-recommended
+# The CRS assumes that modsecurity.conf has been loaded. It is bundled with
+# ModSecurity. If you don't have it, you can get it from:
+# 2.x: https://raw.githubusercontent.com/SpiderLabs/ModSecurity/v2/master/modsecurity.conf-recommended
+# 3.x: https://raw.githubusercontent.com/SpiderLabs/ModSecurity/v3/master/modsecurity.conf-recommended
 #
 # The order of file inclusion in your webserver configuration should always be:
 # 1. modsecurity.conf
@@ -166,8 +167,8 @@ SecDefaultAction "phase:2,log,auditlog,pass"
 # example: [tag "paranoia-level/2"]. This allows you to deduct from the
 # audit log how the WAF behavior is affected by paranoia level.
 #
-# It is important to also look into the variable 
-# tx.enforce_bodyproc_urlencoded (Enforce Body Processor URLENCODED) 
+# It is important to also look into the variable
+# tx.enforce_bodyproc_urlencoded (Enforce Body Processor URLENCODED)
 # defined below. Enabling it closes a possible bypass of CRS.
 #
 # Uncomment this rule to change the default:
@@ -181,7 +182,7 @@ SecDefaultAction "phase:2,log,auditlog,pass"
 #   setvar:tx.paranoia_level=1"
 
 
-# It is possible to execute rules from a higher paranoia level but not include 
+# It is possible to execute rules from a higher paranoia level but not include
 # them in the anomaly scoring. This allows you to take a well-tuned system on
 # paranoia level 1 and add rules from paranoia level 2 without having to fear
 # the new rules would lead to false positives that raise your score above the
@@ -356,7 +357,7 @@ SecDefaultAction "phase:2,log,auditlog,pass"
 #  setvar:tx.crs_exclusions_drupal=1,\
 #  setvar:tx.crs_exclusions_wordpress=1,\
 #  setvar:tx.crs_exclusions_nextcloud=1,\
-#  setvar:tx.crs_exclusions_dokuwik=1,\
+#  setvar:tx.crs_exclusions_dokuwiki=1,\
 #  setvar:tx.crs_exclusions_cpanel=1"
 
 #
@@ -397,6 +398,19 @@ SecDefaultAction "phase:2,log,auditlog,pass"
 #  pass,\
 #  t:none,\
 #  setvar:'tx.allowed_request_content_type=application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|text/plain'"
+
+# Content-Types charsets that a client is allowed to send in a request.
+# Default: utf-8|iso-8859-1|iso-8859-15|windows-1252
+# Uncomment this rule to change the default.
+# Use "|" to separate multiple charsets like in the rule defining
+# tx.allowed_request_content_type.
+#SecAction \
+# "id:900270,\
+#  phase:1,\
+#  nolog,\
+#  pass,\
+#  t:none,\
+#  setvar:'tx.allowed_request_content_type_charset=utf-8|iso-8859-1|iso-8859-15|windows-1252'"
 
 # Allowed HTTP versions.
 # Default: HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0
@@ -828,4 +842,4 @@ SecAction \
   nolog,\
   pass,\
   t:none,\
-  setvar:tx.crs_setup_version=302"
+  setvar:tx.crs_setup_version=311"
